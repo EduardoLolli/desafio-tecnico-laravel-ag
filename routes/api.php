@@ -17,6 +17,4 @@ Route::middleware([CheckAuthMode::class])->group(function () {
 
     Route::apiResource('product-families', ProductFamilyController::class);
     Route::apiResource('products', ProductController::class);
-
-    Route::delete('products/remove/{identifier}', [ProductController::class, 'removeStock']);
 });
