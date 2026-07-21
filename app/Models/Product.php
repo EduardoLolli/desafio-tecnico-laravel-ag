@@ -24,4 +24,9 @@ class Product extends Model
     {
         return $this->belongsTo(ProductFamily::class, 'family_code', 'code');
     }
+
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+    ];
 }

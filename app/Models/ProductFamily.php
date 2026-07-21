@@ -20,4 +20,9 @@ class ProductFamily extends Model
     {
         return $this->hasMany(Product::class, 'family_code', 'code');
     }
+    
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+    ];
 }
