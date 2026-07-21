@@ -8,6 +8,8 @@ use App\Http\Resources\ProductResource;
 use App\Models\Product;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Validation\Rule;
 
 class ProductController extends Controller
@@ -15,18 +17,26 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         try {
-            $products = Product::with('family')
-                ->filter($request->only(['name', 'min_price', 'max_price', 'min_qtt', 'max_qtt', 'family']))
-                ->paginate(10);
+            $filters = $request->only(['name', 'min_price', 'max_price', 'min_qtt', 'max_qtt', 'family']);
+            $page = $request->get('page', 1);
+            $cacheKey = 'products:' . md5(json_encode($filters) . '_page_' . $page);
 
-            if ($products->isEmpty()) {
+            $jsonContent = Cache::tags(['products_list'])->remember($cacheKey, now()->addMinutes(60), function () use ($filters) {
+                $products = Product::with('family')
+                    ->filter($filters)
+                    ->paginate(10);
+                return json_encode(ProductResource::collection($products)->resolve());
+            });
+            $productsData = json_decode($jsonContent, true);
+
+            if (empty($productsData)) {
                 throw new Exception("Nenhum produto foi encontrado");
             }
 
             return response()->json([
                 'success' => true,
                 'message' => "Produtos disponíveis",
-                'data' => ProductResource::collection($products)
+                'data' => $productsData
             ], 200);
         } catch (Exception $e) {
             return response()->json([
@@ -44,6 +54,7 @@ class ProductController extends Controller
             $product = Product::create($validated);
             $product->load('family');
 
+            Cache::tags(['products_list'])->flush();
             return response()->json([
                 'success' => true,
                 'message' => 'Produto criado com sucesso',
@@ -69,8 +80,8 @@ class ProductController extends Controller
             if (!$product) {
                 throw new Exception("Produto não encontrado");
             }
-
             $product->delete();
+            Cache::tags(['products_list'])->flush();
 
             return response()->json([
                 'success' => true,
@@ -121,6 +132,7 @@ class ProductController extends Controller
             }
 
             $product->update($newdata);
+            Cache::tags(['products_list'])->flush();
 
             return response()->json([
                 'success' => true,
