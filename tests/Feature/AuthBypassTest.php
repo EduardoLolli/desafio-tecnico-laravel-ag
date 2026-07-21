@@ -8,13 +8,32 @@ use Tests\TestCase;
 
 class AuthBypassTest extends TestCase
 {
-    /**
-     * A basic feature test example.
-     */
-    public function test_example(): void
+    use RefreshDatabase;
+
+
+    public function test_access_allowed(): void
     {
-        $response = $this->get('/');
+
+        config([
+            'app.env' => 'local',
+            'auth.enabled' => false
+        ]);
+
+        $response = $this->getJson('/api/user');
 
         $response->assertStatus(200);
+    }
+
+    public function test_access_denied(): void
+    {
+        config([
+            'app.env' => 'local',
+            'auth.enabled' => true,
+        ]);
+
+        $response = $this->getJson('/api/perfil');
+
+        $response->assertStatus(401)
+            ->assertJson(['error' => 'Não autorizado.']);
     }
 }
