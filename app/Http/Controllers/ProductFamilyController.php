@@ -7,11 +7,16 @@ use Illuminate\Http\Request;
 
 class ProductFamilyController extends Controller
 {
-    public function index()
+    public function index(Request $request) 
     {
+        $family = ProductFamily::query()
+        ->when($request->filled('name'), function ($query) use ($request) {
+                $query->where('name', 'like', '%' . $request->name . '%');
+            })->get();
+
         return response()->json([
             'message' => "Famílias de produtos disponíveis",
-            'data' => ProductFamily::all()
+            'data' => $family
         ], 200);
     }
 

@@ -18,7 +18,8 @@ class ProductFamilyFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'code' => strtoupper($this->faker->unique()->bothify('??-####')),
+            'name' => ucfirst($this->faker->words(2, true)),
         ];
     }
 }
