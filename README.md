@@ -252,12 +252,19 @@ GET /api/products
 Filtros aplicáveis:
 
 'name'      -> nome do produto,
+
 'min_price' -> preço minimo, 
+
 'max_price' -> preco maximo, 
+
 'min_qtt'   -> quantidade minima, 
+
 'max_qtt'   -> quantidade maxima, 
+
 'family'    -> nome da familia do produto,
+
 'per_page'  -> numero quantidade por página,
+
 'page'      -> numero da página
 
 
