@@ -228,7 +228,7 @@ GET /api/products/{code} - Exibe detalhes de um produto específico
 ```
 
 ```bash
-PUT /api/products/{code} - Atualização de produto
+PATCH /api/products/{code} - Atualização de produto
 ```
 ```bash
 DELETE /api/products/{code} - Remoção de produto
