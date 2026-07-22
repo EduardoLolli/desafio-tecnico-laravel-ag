@@ -29,7 +29,53 @@ git clone https://github.com/EduardoLolli/desafio-tecnico-laravel-ag.git
 cd desafio-tecnico-laravel-ag
 ```
 
-### 2. Configurar o arquivo .env
+### 2.1 Configurar o arquivo .env (ambiente sem PHP e composer local)
+Copie o arquivo de exemplo para criar o seu .env:
+```bash
+cp .env.example .env
+```
+Garanta que as configurações do banco de dados no .env estejam apontando para os dados do container Docker:
+
+```bash
+APP_NAME=Laravel
+APP_ENV=local
+APP_KEY=
+APP_DEBUG=true
+APP_URL=http://localhost:8000
+
+# Ativa (true) ou desativa (false) a obrigatoriedade do JWT em ambiente dev/local
+ENABLE_AUTH=false
+
+# Conexão PostgreSQL (Docker)
+# Por padrão o docker utiliza as conexões especificadas no .env, caso deseje usar credenciais diferentes, altere no arquivo docker-compose.yml
+
+DB_CONNECTION=pgsql
+DB_HOST=database
+DB_PORT=5432
+DB_DATABASE=laravel
+DB_USERNAME=postgres
+DB_PASSWORD=secret
+
+# Duração do Token JWT em minutos 
+JWT_TTL=60
+
+CACHE_STORE=redis
+# CACHE_PREFIX=
+
+MEMCACHED_HOST=127.0.0.1
+
+
+REDIS_CLIENT=predis
+
+# - Se o Laravel estiver rodando em container no MESMO docker-compose: use "redis"
+# - Se o Laravel estiver rodando DIRETO no seu terminal host (php artisan serve): use "127.0.0.1"
+REDIS_HOST=redis  
+REDIS_PASSWORD=null
+REDIS_PORT=6379
+
+
+```
+### 2.2 Configurar o arquivo .env (ambiente sem PHP e composer local)
 Copie o arquivo de exemplo para criar o seu .env:
 ```bash
 cp .env.example .env
@@ -76,12 +122,12 @@ REDIS_PORT=6379
 ```
 
 
-### 3. Subir o Ambiente via Docker
+### 3.1 Subir o Ambiente via Docker (Caso tenha PHP 8.4 e composer configurados localmente)
 Inicie os containers do banco de dados e aplicação:
 ```bash
 docker compose up -d
 ```
-### 4. Instalar as Dependências e Inicializar o Projeto
+### 4.1 Instalar as Dependências e Inicializar o Projeto
 Execute os comandos dentro do container ou no seu terminal local:
 
 ```bash
@@ -100,6 +146,31 @@ php artisan jwt:secret
 php artisan migrate
 
 
+```
+
+### 3.2 Subir o Ambiente via Docker (Caso não tenha PHP 8.4 e composer configurados localmente, rodará via docker)
+Inicie os containers do banco de dados e aplicação:
+```bash
+docker compose -f docker-compose.yml -f docker-compose.app.yml up -d --build
+```
+### 4.1 Instalar as Dependências e Inicializar o Projeto
+Execute os comandos dentro do container ou no seu terminal local:
+
+```bash
+
+# Instalar dependências do Composer
+docker compose exec app composer install
+
+# Gerar a chave da aplicação
+docker compose exec app php artisan key:generate
+
+# Gerar a chave secreta do JWT
+docker compose exec app php artisan jwt:secret
+
+# Executar as migrations para criar as tabelas no PostgreSQL
+# Caso deseje adicionar dados de teste adicione :fresh --seed no comando
+# "docker compose exec app php artisan migrate:fresh --seed"
+docker compose exec app php artisan migrate
 ```
 A aplicação estará acessível em: http://localhost:8000/api
 
