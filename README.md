@@ -55,6 +55,7 @@ ENABLE_AUTH=false
 
 DB_CONNECTION=pgsql
 DB_HOST=127.0.0.1
+# Caso tenha sua porta 5432 já esteja em uso, altere o valor para uma porta livre 
 DB_PORT=5432
 DB_DATABASE=laravel
 DB_USERNAME=postgres
@@ -77,9 +78,14 @@ REDIS_HOST=127.0.0.1
 REDIS_PASSWORD=null
 REDIS_PORT=6379
 ```
+
+
 ______________
 
 ### 3.1 Subir o Ambiente via Docker (Caso tenha PHP 8.4 e composer configurados localmente)
+
+* caso a porta 5432 já esteja em uso, altere ela no .env para outra porta libre
+
 Inicie os containers do banco de dados e aplicação:
 ```bash
 docker compose up -d
@@ -103,7 +109,7 @@ php artisan jwt:secret
 php artisan migrate
 ```
 
-
+A aplicação estará acessível em: http://127.0.0.1:8000/api
 
 ### Rodar testes Unitários:
 ```bash
