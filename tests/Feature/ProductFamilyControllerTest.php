@@ -6,13 +6,18 @@ use App\Models\ProductFamily;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Cache;
 use Tests\TestCase;
 
 class ProductFamilyControllerTest extends TestCase
 {
     use RefreshDatabase;
 
-
+    protected function setUp(): void
+    {
+        parent::setUp();
+        Cache::tags(['products_list'])->flush();
+    }
 
     public function test_list_family_groups()
     {
@@ -46,8 +51,10 @@ class ProductFamilyControllerTest extends TestCase
             ->postJson('/api/product-families', $payload);
 
         $response->assertStatus(201)->assertJson([
-            'code' => $payload['code'],
-            'name' => $payload['name']
+            'data' => [
+                'code' => $payload['code'],
+                'name' => $payload['name']
+            ]
         ]);
 
         $this->assertDatabaseHas(
