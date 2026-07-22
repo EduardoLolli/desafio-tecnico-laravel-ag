@@ -1,0 +1,357 @@
+{
+  "info": {
+    "_postman_id": "43028961-3492-4872-aa8a-13df552fe376",
+    "name": "Desafio-Tecnico",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "40820127"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "register",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Eduardo\",\n    \"email\": \"emailteste@gmail.com\",\n    \"password\": \"teste12345\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{apiURL}}/api/auth/register",
+              "host": [
+                "{{apiURL}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "register"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "login",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"edufernanfeslolli@gmail.com\",\n    \"password\": \"teste12345\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{apiURL}}/api/auth/login",
+              "host": [
+                "{{apiURL}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "logout",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"token\": \"Eduardo\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{apiURL}}/api/auth/logout",
+              "host": [
+                "{{apiURL}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "logout"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "product-families",
+      "item": [
+        {
+          "name": "add-new-product-familiy",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"code\": \"0006\",\n  \"name\": \"Uniformes\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{apiURL}}/api/product-families",
+              "host": [
+                "{{apiURL}}"
+              ],
+              "path": [
+                "api",
+                "product-families"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "list-product-families",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{apiURL}}/api/product-families",
+              "host": [
+                "{{apiURL}}"
+              ],
+              "path": [
+                "api",
+                "product-families"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "remove-product-families",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{apiURL}}/api/product-families/0001",
+              "host": [
+                "{{apiURL}}"
+              ],
+              "path": [
+                "api",
+                "product-families",
+                "0001"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Products",
+      "item": [
+        {
+          "name": "list-products",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{apiURL}}/api/products?min_price=6&page=1&family=",
+              "host": [
+                "{{apiURL}}"
+              ],
+              "path": [
+                "api",
+                "products"
+              ],
+              "query": [
+                {
+                  "key": "min_price",
+                  "value": "6"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "family",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "add-new-product",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"code\":\"091d92\",\n    \"name\": \"Forninho\",\n    \"description\":\"Barra de Metal\",\n    \"price\": 34.90,\n    \"stock_qtt\": 4,\n    \"barcode\": \"2s9dda2sdn1\",\n    \"family_code\": \"0006\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{apiURL}}/api/products",
+              "host": [
+                "{{apiURL}}"
+              ],
+              "path": [
+                "api",
+                "products"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "remove-product",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{apiURL}}/api/products/2984746bhs-asdaadsadda",
+              "host": [
+                "{{apiURL}}"
+              ],
+              "path": [
+                "api",
+                "products",
+                "2984746bhs-asdaadsadda"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get-product-by-code",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{apiURL}}/api/products/0001",
+              "host": [
+                "{{apiURL}}"
+              ],
+              "path": [
+                "api",
+                "products",
+                "0001"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "update-product-data",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"price\": 89.90,\n  \"stock_qtt\": 12\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{apiURL}}/api/products/0002",
+              "host": [
+                "{{apiURL}}"
+              ],
+              "path": [
+                "api",
+                "products",
+                "0002"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
