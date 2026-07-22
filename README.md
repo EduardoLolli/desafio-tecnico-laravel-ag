@@ -25,7 +25,7 @@ Para executar o projeto localmente, você precisará de:
 ### 1. Clocar o Repositório
 
 ```bash
-git clone [https://github.com/EduardoLolli/desafio-tecnico-laravel-ag.git](https://github.com/seu-usuario/seu-repositorio.git)
+git clone https://github.com/EduardoLolli/desafio-tecnico-laravel-ag.git
 cd seu-repositorio
 ```
 
