@@ -1,58 +1,153 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Desafio Técnico Laravel
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Tecnologias e Ferramentas Utilizadas
 
-## About Laravel
+* **Linguagem:** PHP 8.3
+* **Framework:** Laravel ^13.8
+* **Banco de Dados:** PostgreSQL / SQLite (Ambiente de Teste em Memória)
+* **Conteinerização:** Docker & Docker Compose
+* **Autenticação:** JWT (`tymon/jwt-auth`)
+* **Testes Automatizados:** PHPUnit
+* **Documentação & Clientes HTTP:** Insomnia / Postman
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+##  Ambiente Docker
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Para executar o projeto localmente, você precisará de:
+* [Docker](https://www.docker.com/) e [Docker Compose](https://docs.docker.com/compose/) instalados na máquina.
+* Ou ambiente PHP 8.3+ local com Composer instalado.
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Passo a Passo para Clone e Execução
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
-
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+### 1. Clocar o Repositório
 
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+git clone [https://github.com/EduardoLolli/desafio-tecnico-laravel-ag.git](https://github.com/seu-usuario/seu-repositorio.git)
+cd seu-repositorio
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+### 2. Configurar o arquivo .env
+Copie o arquivo de exemplo para criar o seu .env:
+```bash
+cp .env.example .env
+```
+Garanta que as configurações do banco de dados no .env estejam apontando para os dados do container Docker:
 
-## Contributing
+```bash
+APP_NAME=Laravel
+APP_ENV=local
+APP_KEY=
+APP_DEBUG=true
+APP_URL=http://localhost:8000
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+# Ativa (true) ou desativa (false) a obrigatoriedade do JWT em ambiente dev/local
+ENABLE_AUTH=false
 
-## Code of Conduct
+# Conexão PostgreSQL (Docker)
+# Por padrão o docker utiliza as conexões especificadas no .env, caso deseje usar credenciais diferentes, altere no arquivo docker-compose.yml
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+DB_CONNECTION=pgsql
+DB_HOST=127.0.0.1
+DB_PORT=5432
+DB_DATABASE=laravel
+DB_USERNAME=postgres
+DB_PASSWORD=secret
 
-## Security Vulnerabilities
+# Duração do Token JWT em minutos 
+JWT_TTL=60
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+CACHE_STORE=redis
+# CACHE_PREFIX=
 
-## License
+MEMCACHED_HOST=127.0.0.1
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+REDIS_CLIENT=predis
+
+# - Se o Laravel estiver rodando em container no MESMO docker-compose: use "redis"
+# - Se o Laravel estiver rodando DIRETO no seu terminal host (php artisan serve): use "127.0.0.1"
+REDIS_HOST=127.0.0.1  
+REDIS_PASSWORD=null
+REDIS_PORT=6379
+
+```
+
+
+### 3. Subir o Ambiente via Docker
+Inicie os containers do banco de dados e aplicação:
+```bash
+docker compose up -d
+```
+### 4. Instalar as Dependências e Inicializar o Projeto
+Execute os comandos dentro do container ou no seu terminal local:
+
+```bash
+# Instalar dependências do Composer
+composer install
+
+# Gerar a chave da aplicação
+php artisan key:generate
+
+# Gerar a chave secreta do JWT
+php artisan jwt:secret
+
+# Executar as migrations para criar as tabelas no PostgreSQL
+# Caso deseje adicionar dados de teste adicione :fresh --seed no comando
+# "php artisan migrate:fresh --seed"
+php artisan migrate
+
+
+```
+A aplicação estará acessível em: http://localhost:8000/api
+
+
+##  Principais Endpoints da API
+### Autenticação (/api/auth)
+```bash
+POST /api/auth/register - Registro de novo usuário
+```
+
+```bash
+POST /api/auth/login - Autenticação e geração do Bearer Token JWT
+
+```bash
+GET /api/perfil - Dados do usuário autenticado
+
+```bash
+POST /api/auth/logout - Invalidação do Token
+```
+
+### Famílias de Produtos (/api/product-families)
+
+```bash
+GET /api/product-families - Listagem de famílias
+```
+
+```bash
+POST /api/product-families - Cadastro de nova família de produto
+```
+
+### Produtos (/api/products)
+
+```bash
+GET /api/products - Listagem paginada e com cache de produtos (Aceita parâmetros de filtro)
+```
+
+
+```bash
+POST /api/products - Cadastro de produto
+```
+
+```bash
+GET /api/products/{code} - Exibe detalhes de um produto específico
+```
+
+```bash
+PUT /api/products/{code} - Atualização de produto
+```
+```bash
+DELETE /api/products/{code} - Remoção de produto
+```
