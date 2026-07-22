@@ -18,13 +18,17 @@ class ProductController extends Controller
     {
         try {
             $filters = $request->only(['name', 'min_price', 'max_price', 'min_qtt', 'max_qtt', 'family']);
-            $page = $request->get('page', 1);
-            $cacheKey = 'products:' . md5(json_encode($filters) . '_page_' . $page);
+            $perPage = (int) $request->input('per_page', 10);
+            $page = (int) $request->input('page', 1);
 
-            $jsonContent = Cache::tags(['products_list'])->remember($cacheKey, now()->addMinutes(60), function () use ($filters) {
+            $filtersForCache = array_merge($filters, ['per_page' => $perPage, 'page' => $page]);
+            $cacheKey = 'products:' . md5(json_encode($filtersForCache));
+
+            $jsonContent = Cache::tags(['products_list'])->remember($cacheKey, now()->addMinutes(60), function () use ($filters, $perPage) {
                 $products = Product::with('family')
                     ->filter($filters)
-                    ->paginate(10);
+                    ->paginate($perPage);
+
                 return json_encode(ProductResource::collection($products)->resolve());
             });
             $productsData = json_decode($jsonContent, true);

@@ -198,55 +198,91 @@ docker compose exec app php artisan test
 Caso o ENABLE_AUTH esteja como false, não é necessário realizar cadastro e login para, caso esteja como true, é necessário realizar a autenticação e enviar o token no header das outras requisições
 
 ### Autenticação (/api/auth)
+- Registro de novo usuário
 ```bash
-POST /api/auth/register - Registro de novo usuário
+POST /api/auth/register 
 ```
+--------
+- Autenticação e geração do Bearer Token JWT
+```bash
+POST /api/auth/login 
+```
+--------
 
+- Dados do usuário autenticado
 ```bash
-POST /api/auth/login - Autenticação e geração do Bearer Token JWT
+GET /api/perfil 
 ```
+--------
 
+- Invalidação do Token
 ```bash
-GET /api/perfil - Dados do usuário autenticado
+POST /api/auth/logout 
 ```
-
-```bash
-POST /api/auth/logout - Invalidação do Token
-```
+--------
 
 ### Famílias de Produtos (/api/product-families)
 
+- Listagem de famílias
 ```bash
-GET /api/product-families - Listagem de famílias
+GET /api/product-families 
 ```
+--------
 
+- Remoção de família de produto
 ```bash
-DELETE /api/product-families/{code} - Remoção de família de produto
+DELETE /api/product-families/{code} 
 ```
+--------
 
-
+- Cadastro de nova família de produto
 ```bash
-POST /api/product-families - Cadastro de nova família de produto
+POST /api/product-families 
 ```
+--------
 
 ### Produtos (/api/products)
 
+
+- Listagem paginada e com cache de produtos (Aceita parâmetros de filtro)
 ```bash
-GET /api/products - Listagem paginada e com cache de produtos (Aceita parâmetros de filtro)
+GET /api/products 
 ```
 
+Filtros aplicáveis:
 
-```bash
-POST /api/products - Cadastro de produto
-```
+'name'      -> nome do produto,
+'min_price' -> preço minimo, 
+'max_price' -> preco maximo, 
+'min_qtt'   -> quantidade minima, 
+'max_qtt'   -> quantidade maxima, 
+'family'    -> nome da familia do produto,
+'per_page'  -> numero quantidade por página,
+'page'      -> numero da página
 
-```bash
-GET /api/products/{code} - Exibe detalhes de um produto específico
-```
 
+--------
+
+- Cadastro de produto
 ```bash
-PATCH /api/products/{code} - Atualização de produto
+POST /api/products 
 ```
+--------
+
+- Exibe detalhes de um produto específico
 ```bash
-DELETE /api/products/{code} - Remoção de produto
+GET /api/products/{code} 
 ```
+--------
+
+- Atualização de produto
+```bash
+PATCH /api/products/{code} 
+```
+--------
+
+- Remoção de produto
+```bash
+DELETE /api/products/{code} 
+```
+--------
