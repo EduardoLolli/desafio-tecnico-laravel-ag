@@ -16,7 +16,7 @@
 
 Para executar o projeto localmente, você precisará de:
 * [Docker](https://www.docker.com/) e [Docker Compose](https://docs.docker.com/compose/) instalados na máquina.
-* Ou ambiente PHP 8.3+ local com Composer instalado.
+* Ou ambiente PHP 8.4+ local com Composer instalado.
 
 ---
 
@@ -26,9 +26,12 @@ Para executar o projeto localmente, você precisará de:
 
 ```bash
 git clone https://github.com/EduardoLolli/desafio-tecnico-laravel-ag.git
+
 cd desafio-tecnico-laravel-ag
 ```
 
+___________
+# Configuração para ambiente com php e composer Local
 
 ### 2.1 Configurar o arquivo .env (ambiente com PHP e composer local)
 Copie o arquivo de exemplo para criar o seu .env:
@@ -74,7 +77,40 @@ REDIS_HOST=127.0.0.1
 REDIS_PASSWORD=null
 REDIS_PORT=6379
 ```
+______________
 
+### 3.1 Subir o Ambiente via Docker (Caso tenha PHP 8.4 e composer configurados localmente)
+Inicie os containers do banco de dados e aplicação:
+```bash
+docker compose up -d
+```
+### 4.1 Instalar as Dependências e Inicializar o Projeto
+Execute os comandos dentro do container ou no seu terminal local:
+
+```bash
+# Instalar dependências do Composer
+composer install
+
+# Gerar a chave da aplicação
+php artisan key:generate
+
+# Gerar a chave secreta do JWT
+php artisan jwt:secret
+
+# Executar as migrations para criar as tabelas no PostgreSQL
+# Caso deseje adicionar dados de teste adicione :fresh --seed no comando
+# "php artisan migrate:fresh --seed"
+php artisan migrate
+```
+
+
+
+### Rodar testes Unitários:
+```bash
+php artisan test
+```
+______________
+# Configuração para ambiente sem php e composer Local
 
 ### 2.2 Configurar o arquivo .env (ambiente sem PHP e composer local)
 Copie o arquivo de exemplo para criar o seu .env:
@@ -121,33 +157,8 @@ REDIS_PASSWORD=null
 REDIS_PORT=6379
 ```
 
+---------
 
-
-### 3.1 Subir o Ambiente via Docker (Caso tenha PHP 8.4 e composer configurados localmente)
-Inicie os containers do banco de dados e aplicação:
-```bash
-docker compose up -d
-```
-### 4.1 Instalar as Dependências e Inicializar o Projeto
-Execute os comandos dentro do container ou no seu terminal local:
-
-```bash
-# Instalar dependências do Composer
-composer install
-
-# Gerar a chave da aplicação
-php artisan key:generate
-
-# Gerar a chave secreta do JWT
-php artisan jwt:secret
-
-# Executar as migrations para criar as tabelas no PostgreSQL
-# Caso deseje adicionar dados de teste adicione :fresh --seed no comando
-# "php artisan migrate:fresh --seed"
-php artisan migrate
-
-
-```
 
 ### 3.2 Subir o Ambiente via Docker (Caso não tenha PHP 8.4 e composer configurados localmente, rodará via docker)
 Inicie os containers do banco de dados e aplicação:
@@ -175,6 +186,12 @@ docker compose exec app php artisan migrate
 ```
 A aplicação estará acessível em: http://localhost:8000/api
 
+
+### Rodar testes Unitários:
+
+```bash
+docker compose exec app php artisan test
+```
 
 ##  Principais Endpoints da API
 
