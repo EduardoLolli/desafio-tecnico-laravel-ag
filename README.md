@@ -26,7 +26,7 @@ Para executar o projeto localmente, você precisará de:
 
 ```bash
 git clone https://github.com/EduardoLolli/desafio-tecnico-laravel-ag.git
-cd seu-repositorio
+cd desafio-tecnico-laravel-ag
 ```
 
 ### 2. Configurar o arquivo .env
