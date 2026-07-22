@@ -39,4 +39,11 @@ class User extends Authenticatable implements JWTSubject
             'password' => 'hashed',
         ];
     }
+
+    protected $hidden = [
+        'id',
+        'created_at',
+        'updated_at',
+    ];
+    
 }
